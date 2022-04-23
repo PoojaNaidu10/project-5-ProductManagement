@@ -60,9 +60,13 @@ const createUser = async function(req,res){
             return
         }
 
-    
+        if(!isValidfiles(files)){
+            return res.status(400).send({status:false,msg:"profileImage is required"})
+        }
         profileImage = await aws.uploadFile(files[0])
         console.log(profileImage)
+
+        
         
         if(!isValid(phone)){
             return res.status(400).send({status:false,msg:"phone is required"})

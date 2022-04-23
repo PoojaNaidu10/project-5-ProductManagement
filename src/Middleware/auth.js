@@ -10,14 +10,14 @@ let isValidObjectId = function (objectId){
 
 const authentication = async function(req, res, next){
     try{
-        const bearerHeader = req.headers['authentication'];
+        const bearerHeader = req.headers['authorization'];
         if(!bearerHeader){
               return res.status(401).send({status : false, message : "token is missing"})
              }
         if(typeof bearerHeader != 'undefined'){
 
             const bearer = bearerHeader.split(' ');
-//if (!bearer) return res.status(400).send({status:false,msg:"please provide bearer"})
+
         
             const bearerToken = bearer[1];
             req.token = bearerToken;
@@ -34,6 +34,7 @@ const authentication = async function(req, res, next){
 }
 
 const authorization = async function(req, res, next){
+    try{
     //const bearerHeader = req.headers['authentication'];
     const userId = req.params.userId
     const   decodedtoken = jwt.verify( req.token, "secret key")
@@ -54,6 +55,11 @@ const authorization = async function(req, res, next){
     }
 
     next()
+}catch (err) {
+    console.log(err)
+     res.status(500).send({ msg: err.message })
+ }
+
 }
 
 module.exports.authentication =authentication

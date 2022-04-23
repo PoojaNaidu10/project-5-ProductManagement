@@ -140,7 +140,7 @@ const getProducts = async function (req, res) {
             isDeleted: false
         }
 
-        let availableSizes = requestQuery.availableSizes;
+        let availableSizes = requestQuery.size;
 
         if (availableSizes) {
             if (!isValid(availableSizes) && availableSizes.length === 0) {
@@ -253,6 +253,10 @@ const updateProductById = async function (req, res) {
     try {
         const data = req.body
         const productId = req.params.productId
+
+        if (!isValidRequestBody(data)) {
+            return res.status(400).send({ status: false, msg: "No input provided" })
+        }
 
 
         if (!isValidObjectId(productId)) {
